@@ -113,3 +113,48 @@ UTF-8 input: `Archive: Καλημέρα 🌍 — こんにちは`
 ```text
 AACE1:981CC-CPM6M-PXUHP-R8SMK-269TU-C6KNL-LXHMM-MSK1L-HS.11111-1111H-UQK2L-ZPU2K-NA6EK-CLK22-COTUK-2TN9C-62LAU-CKMPE-RU1EO-6KZS6-N1U9U-RSP61-ZE82U-NSYCX-RYS1X-QAZJ2-ZOMEY-XUZHA-QC6XU-YK6MP
 ```
+
+# Ascandane Compact ASCII Encoding (AACE-2)
+
+## Status
+
+AACE-2 is a compact ASCII-only companion profile.  It is intended for small
+plain-ASCII archival strings where the fixed AACE-1 binary container overhead is
+too large.  Non-ASCII text MUST use AACE-1.
+
+## Textual form
+
+AACE-2 starts with `AACE2-<level>:` where `<level>` is `0`, `1`, `2`, or `3`.
+The body is one or more period-delimited records.  Each record is independently
+base-24 encoded with the same AACSS alphabet and five-character hyphen grouping
+as AACE-1.  Periods remain block resynchronization boundaries.
+
+## Compact record container
+
+AACE-2 records are at most 63 ASCII bytes before ECC expansion.  The first byte
+stores the ECC level in the high two bits and the original data length in the
+low six bits.  The second byte stores the block index modulo 256.  The remaining
+bytes are the ECC-coded ASCII payload followed by the selected checksum.
+
+## AACE-2 ECC levels
+
+* **Level 0** stores one payload copy and no checksum, minimizing size.
+* **Level 1** stores one payload copy plus CRC-16/CCITT localized detection.
+* **Level 2** stores two payload copies plus CRC-32, allowing recovery when one
+  copy still matches the checksum.
+* **Level 3** stores three payload copies plus CRC-32 majority recovery.
+
+## AACE-2 compact test vectors
+
+UTF-8/ASCII input: `hello i am atsh`
+
+```text
+AACE2-0:1LMUU-8YC2J-EU86Y-P9UK1-TC8NZ-QZLE1
+```
+
+```text
+AACE2-1:1M11A-KNSAL-ZR21N-R26AU-OZKUU-KMKOS-6LRK
+```
+
+The level-0 vector is 43 characters including prefix and separators, compared
+with 114 characters for the default AACE-1 encoding of the same string.

@@ -12,11 +12,13 @@ reference implementation for the Ascandane Archival Character Set Standard
 
 ```bash
 python -m aace encode "hello i am atsh" --profile high --block-size 128
+python -m aace encode "hello i am atsh" --version 2 --ecc-level 0
 python -m aace decode 'AACE1:...'
 ```
 
 The public Python API exposes `encode(str) -> str`, `decode(str) -> str`,
-`encode_bytes(bytes) -> str`, and `decode_bytes(str) -> bytes`.
+`encode_bytes(bytes) -> str`, `decode_bytes(str) -> bytes`, and compact
+ASCII-only AACE-2 helpers `encode_ascii` and `decode_ascii`.
 
 See [docs/AACE-1.md](docs/AACE-1.md) for the RFC-style standard, binary
-container, canonical text form, ECC profiles, security notes, and test vectors.
+container, canonical text form, AACE-1 ECC profiles, compact AACE-2 ASCII levels, security notes, and test vectors.
